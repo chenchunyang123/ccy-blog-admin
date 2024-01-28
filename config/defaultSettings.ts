@@ -18,6 +18,7 @@ const Settings: ProLayoutProps & {
   token: {},
   splitMenus: false,
   siderMenuType: 'sub',
+  title: '一条放了盐的鱼',
 };
 
 export default Settings;
