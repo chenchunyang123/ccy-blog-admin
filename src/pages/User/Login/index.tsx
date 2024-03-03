@@ -86,6 +86,7 @@ const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
   const { styles } = useStyles();
+  console.log('initialState', initialState)
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
@@ -98,28 +99,15 @@ const Login: React.FC = () => {
     }
   };
   const handleSubmit = async (values: API.LoginParams) => {
-    try {
-      // 登录
-      const msg = await login({
-        ...values,
-        type,
-      });
-      if (msg.status === 'ok') {
-        const defaultLoginSuccessMessage = '登录成功！';
-        message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
-        return;
-      }
-      console.log(msg);
-      // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
-    } catch (error) {
-      const defaultLoginFailureMessage = '登录失败，请重试！';
-      console.log(error);
-      message.error(defaultLoginFailureMessage);
-    }
+    // 登录
+    const msg = await login({
+      ...values,
+      // type,
+    });
+    message.success('登录成功！');
+    await fetchUserInfo();
+    const urlParams = new URL(window.location.href).searchParams;
+    history.push(urlParams.get('redirect') || '/');
   };
   const { status, type: loginType } = userLoginState;
   return (

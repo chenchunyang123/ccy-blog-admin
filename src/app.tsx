@@ -129,4 +129,5 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
  */
 export const request = {
   ...errorConfig,
+  baseURL: 'http://localhost:3001/api',
 };
