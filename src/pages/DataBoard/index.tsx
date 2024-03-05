@@ -3,7 +3,7 @@ import { useModel } from '@umijs/max';
 import React from 'react';
 import { Card, theme } from 'antd';
 
-const Welcome: React.FC = () => {
+const DataBoard: React.FC = () => {
   const { token } = theme.useToken();
   const { initialState } = useModel('@@initialState');
   return (
@@ -55,4 +55,4 @@ const Welcome: React.FC = () => {
   );
 };
 
-export default Welcome;
+export default DataBoard;

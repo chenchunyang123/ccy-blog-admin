@@ -49,6 +49,14 @@ export const errorConfig: RequestConfig = {
   requestInterceptors: [
     (config: RequestOptions) => {
       // 拦截请求配置，进行个性化处理。
+      // header 带上 token
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`,
+        };
+      }
       return { ...config };
     },
   ],
@@ -58,6 +66,13 @@ export const errorConfig: RequestConfig = {
     (response) => {
       // 拦截响应数据，进行个性化处理
       const { data } = response as unknown as ResponseStructure;
+
+      // 登录存token
+      if (data.success) {
+        if (data.data?.token) {
+          localStorage.setItem('token', data.data.token);
+        }
+      }
 
       return response;
     },

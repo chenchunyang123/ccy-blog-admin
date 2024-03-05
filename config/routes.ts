@@ -12,11 +12,28 @@
  */
 export default [
   {
-    path: '/user',
+    path: '/login',
     layout: false,
-    routes: [{ name: '登录', path: '/user/login', component: './User/Login' }],
+    component: './Login',
   },
-  { path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome' },
+  {
+    path: '/data',
+    name: '数据看板',
+    icon: 'smile',
+    component: './DataBoard',
+  },
+  {
+    path: '/article',
+    name: '文章管理',
+    icon: 'smile',
+    routes: [
+      { path: '/article/create', name: '创建文章', component: './Article/ArticleCreate', },
+      { path: '/article/list', name: '文章列表', component: './Article/ArticleList', },
+      { path: '/article/type', name: '分类管理', component: './Article/TypeManagement', },
+      { path: '/article/tag', name: '标签管理', component: './Article/TagManagement', },
+    ],
+  },
+
   { path: '/test', name: '测试', icon: 'smile', component: './Test' },
   {
     path: '/admin',
@@ -29,6 +46,6 @@ export default [
     ],
   },
   { name: '查询表格', icon: 'table', path: '/list', component: './TableList' },
-  { path: '/', redirect: '/welcome' },
+  { path: '/', redirect: '/data' },
   { path: '*', layout: false, component: './404' },
 ];
