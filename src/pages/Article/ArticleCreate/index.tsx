@@ -1,43 +1,35 @@
 import { PageContainer } from '@ant-design/pro-components';
-import bytemdPluginBreaks from '@bytemd/plugin-breaks';
-import bytemdPluginFrontmatter from '@bytemd/plugin-frontmatter';
-import bytemdPluginGemoji from '@bytemd/plugin-gemoji';
-import bytemdPluginGfm from '@bytemd/plugin-gfm';
-import bytemdPluginHighlight from '@bytemd/plugin-highlight';
-import bytemdPluginMath from '@bytemd/plugin-math';
-import bytemdPluginMediumZoom from '@bytemd/plugin-medium-zoom';
-import bytemdPluginMermaid from '@bytemd/plugin-mermaid';
-import { Editor } from '@bytemd/react';
-import type { BytemdPlugin } from 'bytemd';
-import 'bytemd/dist/index.min.css';
-import 'highlight.js/styles/vs.min.css';
+import { Button, Flex, Input, Modal } from 'antd';
+import { MdEditor } from 'md-editor-rt';
+import 'md-editor-rt/lib/style.css';
 import React, { useState } from 'react';
-
-const plugins: BytemdPlugin[] = [
-  bytemdPluginBreaks(),
-  bytemdPluginFrontmatter(),
-  bytemdPluginGemoji(),
-  bytemdPluginGfm(),
-  bytemdPluginHighlight(),
-  bytemdPluginMath(),
-  bytemdPluginMediumZoom(),
-  bytemdPluginMermaid(),
-];
 
 const Welcome: React.FC = () => {
   const [value, setValue] = useState('');
+  const [open, setOpen] = useState(true);
 
-  console.log('value', value);
+  console.log(value);
+  const articleModal = (
+    <Modal open={open} title='发布文章' okText='确定' cancelText='取消'>
+      <p>文章标题：标题</p>
+      <p>文章内容：{value}</p>
+    </Modal>
+  );
+
+  const onClickBtn = () => {
+    setOpen(true);
+  }
 
   return (
     <PageContainer>
-      <Editor
-        value={value}
-        plugins={plugins}
-        onChange={(v) => {
-          setValue(v);
-        }}
-      />
+      <Flex vertical gap={24}>
+        <Flex gap={12}>
+          <Input placeholder="请输入文章标题..." />
+          <Button type="primary" onClick={onClickBtn}>发布文章</Button>
+        </Flex>
+        <MdEditor modelValue={value} onChange={setValue} />
+      </Flex>
+      {articleModal}
     </PageContainer>
   );
 };
