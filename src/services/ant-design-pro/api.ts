@@ -61,10 +61,10 @@ export async function rule(
 export async function updateRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',
-    data:{
+    data: {
       method: 'update',
       ...(options || {}),
-    }
+    },
   });
 }
 
@@ -72,10 +72,10 @@ export async function updateRule(options?: { [key: string]: any }) {
 export async function addRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
     method: 'POST',
-    data:{
+    data: {
       method: 'post',
       ...(options || {}),
-    }
+    },
   });
 }
 
@@ -83,9 +83,26 @@ export async function addRule(options?: { [key: string]: any }) {
 export async function removeRule(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/rule', {
     method: 'POST',
-    data:{
+    data: {
       method: 'delete',
       ...(options || {}),
-    }
+    },
+  });
+}
+
+export async function createArticle(data: Record<string, any>) {
+  return request<Record<string, any>>('/article', {
+    method: 'POST',
+    data,
+  });
+}
+
+export async function getArticleList(params: {
+  pageNum?: number;
+  pageSize?: number;
+}) {
+  return request<Record<string, any>>('/article', {
+    method: 'GET',
+    params,
   });
 }
