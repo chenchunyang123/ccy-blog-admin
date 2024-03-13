@@ -27,13 +27,13 @@ export default [
     name: '文章管理',
     icon: 'smile',
     routes: [
-      { path: '/article/create', name: '创建文章', component: './Article/ArticleCreate', },
-      { path: '/article/list', name: '文章列表', component: './Article/ArticleList', },
-      { path: '/article/type', name: '分类管理', component: './Article/TypeManagement', },
-      { path: '/article/tag', name: '标签管理', component: './Article/TagManagement', },
+      { path: '/article/create', name: '创建文章', component: './Article/ArticleCreate' },
+      { path: '/article/list', name: '文章列表', component: './Article/ArticleList' },
+      { path: '/article/type', name: '分类管理', component: './Article/TypeManagement' },
+      { path: '/article/tag', name: '标签管理', component: './Article/TagManagement' },
     ],
   },
-
+  { path: '/article/update/:id', component: './Article/ArticleUpdate' },
   { path: '/test', name: '测试', icon: 'smile', component: './Test' },
   {
     path: '/admin',

@@ -97,11 +97,28 @@ export async function createArticle(data: Record<string, any>) {
   });
 }
 
-export async function getArticleList(params: {
-  pageNum?: number;
-  pageSize?: number;
-}) {
+export async function updateArticle(id: string, data: Record<string, any>) {
+  return request<Record<string, any>>(`/article/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
+export async function getArticleList(params: { pageNum?: number; pageSize?: number }) {
   return request<Record<string, any>>('/article', {
+    method: 'GET',
+    params,
+  });
+}
+
+export async function getArticleById(id: string) {
+  return request<Record<string, any>>(`/article/${id}`, {
+    method: 'GET',
+  });
+}
+
+export async function getArticleCategoryList(params: { pageNum?: number; pageSize?: number }) {
+  return request<Record<string, any>>('/category', {
     method: 'GET',
     params,
   });

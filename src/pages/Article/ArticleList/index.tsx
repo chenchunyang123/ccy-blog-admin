@@ -2,7 +2,8 @@ import { getArticleList } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
-import { Button, Space } from 'antd';
+import { history } from '@umijs/max';
+import { Button } from 'antd';
 import { useRef } from 'react';
 export const waitTimePromise = async (time: number = 100) => {
   return new Promise((resolve) => {
@@ -43,37 +44,37 @@ const columns: ProColumns<ArticleListItem>[] = [
       ],
     },
   },
-  {
-    title: '分类',
-    dataIndex: 'category',
-    ellipsis: true,
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: '此项为必填项',
-        },
-      ],
-    },
-  },
-  {
-    disable: true,
-    title: '标签',
-    dataIndex: 'content',
-    search: false,
-    renderFormItem: (_, { defaultRender }) => {
-      return defaultRender(_);
-    },
-    render: (_, record) => (
-      <Space>
-        {/* {record.map(({ name, color }) => (
-          <Tag color={color} key={name}>
-            {name}
-          </Tag>
-        ))} */}
-      </Space>
-    ),
-  },
+  // {
+  //   title: '分类',
+  //   dataIndex: 'category',
+  //   ellipsis: true,
+  //   formItemProps: {
+  //     rules: [
+  //       {
+  //         required: true,
+  //         message: '此项为必填项',
+  //       },
+  //     ],
+  //   },
+  // },
+  // {
+  //   disable: true,
+  //   title: '标签',
+  //   dataIndex: 'content',
+  //   search: false,
+  //   renderFormItem: (_, { defaultRender }) => {
+  //     return defaultRender(_);
+  //   },
+  //   render: (_, record) => (
+  //     <Space>
+  //       {/* {record.map(({ name, color }) => (
+  //         <Tag color={color} key={name}>
+  //           {name}
+  //         </Tag>
+  //       ))} */}
+  //     </Space>
+  //   ),
+  // },
   {
     title: '创建时间',
     key: 'showTime',
@@ -108,11 +109,11 @@ const columns: ProColumns<ArticleListItem>[] = [
     title: '操作',
     valueType: 'option',
     key: 'option',
-    render: (text, record, _, action) => [
+    render: (text, record) => [
       <a
         key="editable"
         onClick={() => {
-          action?.startEditable?.(record.id);
+          history.push(`/article/update/${record.id}`);
         }}
       >
         编辑
@@ -192,7 +193,7 @@ const ArticleList: React.FC = () => {
             key="button"
             icon={<PlusOutlined />}
             onClick={() => {
-              actionRef.current?.reload();
+              history.push('/article/create');
             }}
             type="primary"
           >
