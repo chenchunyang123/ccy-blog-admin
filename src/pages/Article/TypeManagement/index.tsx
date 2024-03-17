@@ -1,21 +1,10 @@
-import { getArticleCategoryList } from '@/services/ant-design-pro/api';
+import { createArticleCategory, getArticleCategoryList } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { ModalForm, PageContainer, ProForm, ProFormText, ProTable } from '@ant-design/pro-components';
+import type { ActionType, ProColumns, ProFormInstance } from '@ant-design/pro-components';
+import { ModalForm, PageContainer, ProFormText, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
 import { Button, message } from 'antd';
 import { useRef, useState } from 'react';
-export const waitTimePromise = async (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
-};
-
-export const waitTime = async (time: number = 100) => {
-  await waitTimePromise(time);
-};
 
 type TypeManagementItem = {
   id: number;
@@ -31,50 +20,14 @@ type TypeManagementItem = {
 
 const columns: ProColumns<TypeManagementItem>[] = [
   {
-    title: '标题',
-    dataIndex: 'title',
-    ellipsis: true,
-    tooltip: '标题过长会自动收缩',
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: '此项为必填项',
-        },
-      ],
-    },
+    title: '分类名称',
+    dataIndex: 'name',
   },
-  // {
-  //   title: '分类',
-  //   dataIndex: 'category',
-  //   ellipsis: true,
-  //   formItemProps: {
-  //     rules: [
-  //       {
-  //         required: true,
-  //         message: '此项为必填项',
-  //       },
-  //     ],
-  //   },
-  // },
-  // {
-  //   disable: true,
-  //   title: '标签',
-  //   dataIndex: 'content',
-  //   search: false,
-  //   renderFormItem: (_, { defaultRender }) => {
-  //     return defaultRender(_);
-  //   },
-  //   render: (_, record) => (
-  //     <Space>
-  //       {/* {record.map(({ name, color }) => (
-  //         <Tag color={color} key={name}>
-  //           {name}
-  //         </Tag>
-  //       ))} */}
-  //     </Space>
-  //   ),
-  // },
+  {
+    title: '文章数量',
+    dataIndex: 'name',
+    hideInSearch: true,
+  },
   {
     title: '创建时间',
     key: 'showTime',
@@ -126,8 +79,10 @@ const columns: ProColumns<TypeManagementItem>[] = [
 ];
 
 const TypeManagement: React.FC = () => {
+  const modalFormRef = useRef<ProFormInstance>();
   const actionRef = useRef<ActionType>();
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [listLoading, setListLoading] = useState(false);
 
   return (
     <PageContainer>
@@ -135,12 +90,15 @@ const TypeManagement: React.FC = () => {
         columns={columns}
         actionRef={actionRef}
         cardBordered
+        loading={listLoading}
         request={async (params, sort, filter) => {
           console.log(sort, filter);
+          setListLoading(true);
           const res = await getArticleCategoryList({
             pageNum: params.current,
             pageSize: params.pageSize,
           });
+          setListLoading(false);
           return {
             data: res?.data?.list,
             success: res?.success,
@@ -204,19 +162,33 @@ const TypeManagement: React.FC = () => {
       <ModalForm
         width={600}
         title="添加分类"
+        formRef={modalFormRef}
         open={modalVisible}
-        onFinish={async () => {
-          message.success('提交成功');
-          return true;
+        onFinish={async (values) => {
+          const { category } = values;
+          const res = await createArticleCategory({
+            name: category,
+          });
+          if (res?.success) {
+            message.success('创建成功');
+            modalFormRef?.current?.resetFields?.();
+            actionRef.current?.reload?.();
+            return true;
+          }
         }}
-        onOpenChange={setModalVisible}
+        onOpenChange={(v) => {
+          setModalVisible(v);
+          if (v) {
+            modalFormRef?.current?.resetFields?.();
+          }
+        }}
       >
-          <ProFormText
-            width="md"
-            name="category"
-            label="分类名称"
-            placeholder="请输入分类名称"
-          />
+        <ProFormText
+          name="category"
+          label="分类名称"
+          placeholder="请输入"
+          rules={[{ required: true }]}
+        />
       </ModalForm>
     </PageContainer>
   );

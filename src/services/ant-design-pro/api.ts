@@ -123,3 +123,24 @@ export async function getArticleCategoryList(params: { pageNum?: number; pageSiz
     params,
   });
 }
+
+export async function createArticleCategory(data: Record<string, any>) {
+  return request<Record<string, any>>('/category', {
+    method: 'POST',
+    data,
+  });
+}
+
+export async function getArticleTagList(params: { pageNum?: number; pageSize?: number }) {
+  return request<Record<string, any>>('/tag', {
+    method: 'GET',
+    params,
+  });
+}
+
+export async function createArticleTag(data: Record<string, any>) {
+  return request<Record<string, any>>('/tag', {
+    method: 'POST',
+    data,
+  });
+}
