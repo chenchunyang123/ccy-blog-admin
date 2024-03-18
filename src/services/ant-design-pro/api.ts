@@ -131,6 +131,19 @@ export async function createArticleCategory(data: Record<string, any>) {
   });
 }
 
+export async function updateArticleCategory(id: number, data: Record<string, any>) {
+  return request<Record<string, any>>(`/category/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
+export async function deleteArticleCategory(id: number) {
+  return request<Record<string, any>>(`/category/${id}`, {
+    method: 'DELETE',
+  });
+}
+
 export async function getArticleTagList(params: { pageNum?: number; pageSize?: number }) {
   return request<Record<string, any>>('/tag', {
     method: 'GET',

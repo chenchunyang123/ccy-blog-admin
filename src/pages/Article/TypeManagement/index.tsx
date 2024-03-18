@@ -1,88 +1,106 @@
-import { createArticleCategory, getArticleCategoryList } from '@/services/ant-design-pro/api';
+import {
+  createArticleCategory,
+  deleteArticleCategory,
+  getArticleCategoryList,
+  updateArticleCategory,
+} from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import { ModalForm, PageContainer, ProFormText, ProTable } from '@ant-design/pro-components';
-import { history } from '@umijs/max';
-import { Button, message } from 'antd';
+import { Button, Popconfirm, message } from 'antd';
 import { useRef, useState } from 'react';
 
 type TypeManagementItem = {
   id: number;
-  title: string;
-  content: string;
-  word_count: number;
-  reading_duration_minutes: number;
+  name: string;
   created_at: string;
   updated_at: string;
-  tags: any[];
-  category: string;
 };
-
-const columns: ProColumns<TypeManagementItem>[] = [
-  {
-    title: '分类名称',
-    dataIndex: 'name',
-  },
-  {
-    title: '文章数量',
-    dataIndex: 'name',
-    hideInSearch: true,
-  },
-  {
-    title: '创建时间',
-    key: 'showTime',
-    dataIndex: 'created_at',
-    valueType: 'dateTime',
-    sorter: true,
-    hideInSearch: true,
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'created_at',
-    valueType: 'dateRange',
-    hideInTable: true,
-    search: {
-      transform: (value) => {
-        return {
-          startTime: value[0],
-          endTime: value[1],
-        };
-      },
-    },
-  },
-  {
-    title: '更新时间',
-    key: 'showTime',
-    dataIndex: 'updated_at',
-    valueType: 'dateTime',
-    sorter: true,
-    hideInSearch: true,
-  },
-  {
-    title: '操作',
-    valueType: 'option',
-    key: 'option',
-    render: (text, record) => [
-      <a
-        key="editable"
-        onClick={() => {
-          history.push(`/article/update/${record.id}`);
-        }}
-      >
-        编辑
-      </a>,
-      <a href={record.url} target="_blank" rel="noopener noreferrer" key="view">
-        删除
-      </a>,
-    ],
-  },
-];
 
 const TypeManagement: React.FC = () => {
   const modalFormRef = useRef<ProFormInstance>();
   const actionRef = useRef<ActionType>();
   const [modalVisible, setModalVisible] = useState(false);
   const [listLoading, setListLoading] = useState(false);
+  const [modalStatus, setModalStatus] = useState<'create' | 'update'>('create');
+
+  const selectedRowValue = useRef<TypeManagementItem>();
+
+  const modalIsCreate = modalStatus === 'create';
+
+  const columns: ProColumns<TypeManagementItem>[] = [
+    {
+      title: '分类名称',
+      dataIndex: 'name',
+    },
+    {
+      title: '文章数量',
+      dataIndex: 'name',
+      hideInSearch: true,
+    },
+    {
+      title: '创建时间',
+      key: 'showTime',
+      dataIndex: 'created_at',
+      valueType: 'dateTime',
+      sorter: true,
+      hideInSearch: true,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'created_at',
+      valueType: 'dateRange',
+      hideInTable: true,
+      search: {
+        transform: (value) => {
+          return {
+            startTime: value[0],
+            endTime: value[1],
+          };
+        },
+      },
+    },
+    {
+      title: '更新时间',
+      key: 'showTime',
+      dataIndex: 'updated_at',
+      valueType: 'dateTime',
+      sorter: true,
+      hideInSearch: true,
+    },
+    {
+      title: '操作',
+      valueType: 'option',
+      key: 'option',
+      render: (text, record) => [
+        <a
+          key="editable"
+          onClick={() => {
+            setModalVisible(true);
+            setModalStatus('update');
+            selectedRowValue.current = record;
+          }}
+        >
+          编辑
+        </a>,
+        <Popconfirm
+          key="delete"
+          title="确认删除？"
+          okText="确认"
+          cancelText="取消"
+          onConfirm={async () => {
+            const res = await deleteArticleCategory(record.id);
+            if (res?.success) {
+              message.success('删除成功');
+              actionRef.current?.reload?.();
+            }
+          }}
+        >
+          <a>删除</a>
+        </Popconfirm>,
+      ],
+    },
+  ];
 
   return (
     <PageContainer>
@@ -150,6 +168,7 @@ const TypeManagement: React.FC = () => {
             key="button"
             icon={<PlusOutlined />}
             onClick={() => {
+              setModalStatus('update');
               setModalVisible(true);
             }}
             type="primary"
@@ -159,37 +178,48 @@ const TypeManagement: React.FC = () => {
         ]}
       />
       {/* 分类编辑弹框 */}
-      <ModalForm
-        width={600}
-        title="添加分类"
-        formRef={modalFormRef}
-        open={modalVisible}
-        onFinish={async (values) => {
-          const { category } = values;
-          const res = await createArticleCategory({
-            name: category,
-          });
-          if (res?.success) {
-            message.success('创建成功');
-            modalFormRef?.current?.resetFields?.();
-            actionRef.current?.reload?.();
-            return true;
-          }
-        }}
-        onOpenChange={(v) => {
-          setModalVisible(v);
-          if (v) {
-            modalFormRef?.current?.resetFields?.();
-          }
-        }}
-      >
-        <ProFormText
-          name="category"
-          label="分类名称"
-          placeholder="请输入"
-          rules={[{ required: true }]}
-        />
-      </ModalForm>
+      {modalVisible && (
+        <ModalForm
+          width={600}
+          title={modalIsCreate ? '添加分类' : '编辑分类'}
+          formRef={modalFormRef}
+          open={modalVisible}
+          onFinish={async (values) => {
+            const { category } = values;
+            const res = modalIsCreate
+              ? await createArticleCategory({
+                  name: category,
+                })
+              : await updateArticleCategory(selectedRowValue?.current?.id as number, {
+                  name: category,
+                });
+            if (res?.success) {
+              message.success(modalIsCreate ? '添加成功' : '编辑成功');
+              actionRef.current?.reload?.();
+              return true;
+            }
+          }}
+          onOpenChange={(v) => {
+            setModalVisible(v);
+            if (!v) {
+              selectedRowValue.current = undefined;
+            }
+          }}
+          modalProps={{
+            destroyOnClose: true,
+          }}
+          initialValues={{
+            category: modalIsCreate ? '' : selectedRowValue.current?.name,
+          }}
+        >
+          <ProFormText
+            name="category"
+            label="分类名称"
+            placeholder="请输入"
+            rules={[{ required: true }]}
+          />
+        </ModalForm>
+      )}
     </PageContainer>
   );
 };
