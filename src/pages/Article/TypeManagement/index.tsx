@@ -54,8 +54,8 @@ const TypeManagement: React.FC = () => {
       search: {
         transform: (value) => {
           return {
-            startTime: value[0],
-            endTime: value[1],
+            created_at_from: value?.[0],
+            created_at_to: value?.[1],
           };
         },
       },
@@ -110,11 +110,16 @@ const TypeManagement: React.FC = () => {
         cardBordered
         loading={listLoading}
         request={async (params, sort, filter) => {
-          console.log(sort, filter);
+          console.log('params', params);
+          console.log('sort', sort);
+          console.log('filter', filter);
           setListLoading(true);
           const res = await getArticleCategoryList({
             pageNum: params.current,
             pageSize: params.pageSize,
+            name: params.name,
+            created_at_from: params.created_at_from,
+            created_at_to: params.created_at_to,
           });
           setListLoading(false);
           return {
@@ -132,9 +137,7 @@ const TypeManagement: React.FC = () => {
           defaultValue: {
             option: { fixed: 'right', disable: true },
           },
-          onChange(value) {
-            console.log('value: ', value);
-          },
+          onChange(value) {},
         }}
         rowKey="id"
         search={{
@@ -151,7 +154,7 @@ const TypeManagement: React.FC = () => {
             if (type === 'get') {
               return {
                 ...values,
-                created_at: [values.startTime, values.endTime],
+                created_at: [values.created_at_from, values.created_at_to],
               };
             }
             return values;
@@ -168,8 +171,9 @@ const TypeManagement: React.FC = () => {
             key="button"
             icon={<PlusOutlined />}
             onClick={() => {
-              setModalStatus('update');
+              setModalStatus('create');
               setModalVisible(true);
+              selectedRowValue.current = undefined;
             }}
             type="primary"
           >
@@ -194,7 +198,7 @@ const TypeManagement: React.FC = () => {
                   name: category,
                 });
             if (res?.success) {
-              message.success(modalIsCreate ? '添加成功' : '编辑成功');
+              message.success(modalIsCreate ? '添加成功' : '更新成功');
               actionRef.current?.reload?.();
               return true;
             }

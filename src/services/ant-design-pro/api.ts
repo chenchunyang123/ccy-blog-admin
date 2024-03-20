@@ -104,7 +104,13 @@ export async function updateArticle(id: string, data: Record<string, any>) {
   });
 }
 
-export async function getArticleList(params: { pageNum?: number; pageSize?: number }) {
+export async function getArticleList(params: {
+  pageNum?: number;
+  pageSize?: number;
+  title: string;
+  created_at_from: string;
+  created_at_to: string;
+}) {
   return request<Record<string, any>>('/article', {
     method: 'GET',
     params,
@@ -117,7 +123,19 @@ export async function getArticleById(id: string) {
   });
 }
 
-export async function getArticleCategoryList(params: { pageNum?: number; pageSize?: number }) {
+export async function deleteArticle(id: number) {
+  return request<Record<string, any>>(`/article/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function getArticleCategoryList(params: {
+  pageNum?: number;
+  pageSize?: number;
+  name?: string;
+  created_at_from?: string;
+  created_at_to?: string;
+}) {
   return request<Record<string, any>>('/category', {
     method: 'GET',
     params,
@@ -144,7 +162,13 @@ export async function deleteArticleCategory(id: number) {
   });
 }
 
-export async function getArticleTagList(params: { pageNum?: number; pageSize?: number }) {
+export async function getArticleTagList(params: {
+  pageNum?: number;
+  pageSize?: number;
+  name?: string;
+  created_at_from?: string;
+  created_at_to?: string;
+}) {
   return request<Record<string, any>>('/tag', {
     method: 'GET',
     params,
@@ -154,6 +178,19 @@ export async function getArticleTagList(params: { pageNum?: number; pageSize?: n
 export async function createArticleTag(data: Record<string, any>) {
   return request<Record<string, any>>('/tag', {
     method: 'POST',
+    data,
+  });
+}
+
+export async function deleteArticleTag(id: number) {
+  return request<Record<string, any>>(`/tag/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function updateArticleTag(id: number, data: Record<string, any>) {
+  return request<Record<string, any>>(`/tag/${id}`, {
+    method: 'PUT',
     data,
   });
 }
