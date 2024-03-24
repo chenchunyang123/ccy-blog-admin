@@ -35,12 +35,12 @@ const TypeManagement: React.FC = () => {
     },
     {
       title: '文章数量',
-      dataIndex: 'name',
+      dataIndex: 'article_count',
       hideInSearch: true,
     },
     {
       title: '创建时间',
-      key: 'showTime',
+      key: 'created_at_1',
       dataIndex: 'created_at',
       valueType: 'dateTime',
       sorter: true,
@@ -48,6 +48,7 @@ const TypeManagement: React.FC = () => {
     },
     {
       title: '创建时间',
+      key: 'created_at_2',
       dataIndex: 'created_at',
       valueType: 'dateRange',
       hideInTable: true,
@@ -62,7 +63,6 @@ const TypeManagement: React.FC = () => {
     },
     {
       title: '更新时间',
-      key: 'showTime',
       dataIndex: 'updated_at',
       valueType: 'dateTime',
       sorter: true,
@@ -109,10 +109,7 @@ const TypeManagement: React.FC = () => {
         actionRef={actionRef}
         cardBordered
         loading={listLoading}
-        request={async (params, sort, filter) => {
-          console.log('params', params);
-          console.log('sort', sort);
-          console.log('filter', filter);
+        request={async (params, sort) => {
           setListLoading(true);
           const res = await getArticleCategoryList({
             pageNum: params.current,
@@ -120,6 +117,7 @@ const TypeManagement: React.FC = () => {
             name: params.name,
             created_at_from: params.created_at_from,
             created_at_to: params.created_at_to,
+            ...sort,
           });
           setListLoading(false);
           return {

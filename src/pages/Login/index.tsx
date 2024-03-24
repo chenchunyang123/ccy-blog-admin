@@ -86,7 +86,6 @@ const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
   const { styles } = useStyles();
-  console.log('initialState', initialState)
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {

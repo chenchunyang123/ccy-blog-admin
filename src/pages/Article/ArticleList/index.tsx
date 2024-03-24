@@ -3,7 +3,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Button, Popconfirm, message } from 'antd';
+import { Button, Popconfirm, Space, Tag, message } from 'antd';
 import { useRef, useState } from 'react';
 export const waitTimePromise = async (time: number = 100) => {
   return new Promise((resolve) => {
@@ -48,40 +48,31 @@ const ArticleList: React.FC = () => {
         ],
       },
     },
-    // {
-    //   title: '分类',
-    //   dataIndex: 'category',
-    //   ellipsis: true,
-    //   formItemProps: {
-    //     rules: [
-    //       {
-    //         required: true,
-    //         message: '此项为必填项',
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   disable: true,
-    //   title: '标签',
-    //   dataIndex: 'content',
-    //   search: false,
-    //   renderFormItem: (_, { defaultRender }) => {
-    //     return defaultRender(_);
-    //   },
-    //   render: (_, record) => (
-    //     <Space>
-    //       {/* {record.map(({ name, color }) => (
-    //         <Tag color={color} key={name}>
-    //           {name}
-    //         </Tag>
-    //       ))} */}
-    //     </Space>
-    //   ),
-    // },
+    {
+      title: '分类',
+      dataIndex: ['category', 'name'],
+      hideInSearch: true,
+    },
+    {
+      title: '标签',
+      dataIndex: 'tags',
+      hideInSearch: true,
+      render: (_, record) =>
+        record.tags?.length ? (
+          <Space>
+            {record.tags.map(({ name }) => (
+              <Tag color="blue" key={name}>
+                {name}
+              </Tag>
+            ))}
+          </Space>
+        ) : (
+          '-'
+        ),
+    },
     {
       title: '创建时间',
-      key: 'showTime',
+      key: 'created_at_1',
       dataIndex: 'created_at',
       valueType: 'dateTime',
       sorter: true,
@@ -89,6 +80,7 @@ const ArticleList: React.FC = () => {
     },
     {
       title: '创建时间',
+      key: 'created_at_2',
       dataIndex: 'created_at',
       valueType: 'dateRange',
       hideInTable: true,
@@ -151,10 +143,7 @@ const ArticleList: React.FC = () => {
         actionRef={actionRef}
         cardBordered
         loading={listLoading}
-        request={async (params, sort, filter) => {
-          console.log('params', params);
-          console.log('sort', sort);
-          console.log('filter', filter);
+        request={async (params, sort) => {
           setListLoading(true);
           const res = await getArticleList({
             pageNum: params.current,
@@ -162,6 +151,7 @@ const ArticleList: React.FC = () => {
             title: params.title,
             created_at_from: params.created_at_from,
             created_at_to: params.created_at_to,
+            ...sort,
           });
           setListLoading(false);
           return {
