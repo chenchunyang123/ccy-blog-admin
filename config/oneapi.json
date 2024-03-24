@@ -179,7 +179,7 @@
             }
           },
           {
-            "name": "pageSize",
+            "name": "page_size",
             "in": "query",
             "description": "页面的容量",
             "schema": {
@@ -406,7 +406,7 @@
           "current": {
             "type": "number"
           },
-          "pageSize": {
+          "page_size": {
             "type": "number"
           }
         }

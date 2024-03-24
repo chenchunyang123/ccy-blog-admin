@@ -44,7 +44,7 @@ export async function rule(
     /** 当前的页码 */
     current?: number;
     /** 页面的容量 */
-    pageSize?: number;
+    page_size?: number;
   },
   options?: { [key: string]: any },
 ) {
@@ -105,8 +105,8 @@ export async function updateArticle(id: string, data: Record<string, any>) {
 }
 
 export async function getArticleList(params: {
-  pageNum?: number;
-  pageSize?: number;
+  page_num?: number;
+  page_size?: number;
   title: string;
   created_at_from: string;
   created_at_to: string;
@@ -130,8 +130,8 @@ export async function deleteArticle(id: number) {
 }
 
 export async function getArticleCategoryList(params: {
-  pageNum?: number;
-  pageSize?: number;
+  page_num?: number;
+  page_size?: number;
   name?: string;
   created_at_from?: string;
   created_at_to?: string;
@@ -139,6 +139,12 @@ export async function getArticleCategoryList(params: {
   return request<Record<string, any>>('/category', {
     method: 'GET',
     params,
+  });
+}
+
+export async function getAllArticleCategory() {
+  return request<Record<string, any>>('/category/all', {
+    method: 'GET',
   });
 }
 
@@ -163,8 +169,8 @@ export async function deleteArticleCategory(id: number) {
 }
 
 export async function getArticleTagList(params: {
-  pageNum?: number;
-  pageSize?: number;
+  page_num?: number;
+  page_size?: number;
   name?: string;
   created_at_from?: string;
   created_at_to?: string;
@@ -172,6 +178,12 @@ export async function getArticleTagList(params: {
   return request<Record<string, any>>('/tag', {
     method: 'GET',
     params,
+  });
+}
+
+export async function getAllArticleTag() {
+  return request<Record<string, any>>('/tag/all', {
+    method: 'GET',
   });
 }
 

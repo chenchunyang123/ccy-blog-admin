@@ -3,10 +3,10 @@ import moment from 'moment';
 import { parse } from 'url';
 
 // mock tableListDataSource
-const genList = (current: number, pageSize: number) => {
+const genList = (current: number, page_size: number) => {
   const tableListDataSource: API.RuleListItem[] = [];
 
-  for (let i = 0; i < pageSize; i += 1) {
+  for (let i = 0; i < page_size; i += 1) {
     const index = (current - 1) * 10 + i;
     tableListDataSource.push({
       key: index,
@@ -37,7 +37,7 @@ function getRule(req: Request, res: Response, u: string) {
   if (!realUrl || Object.prototype.toString.call(realUrl) !== '[object String]') {
     realUrl = req.url;
   }
-  const { current = 1, pageSize = 10 } = req.query;
+  const { current = 1, page_size = 10 } = req.query;
   const params = parse(realUrl, true).query as unknown as API.PageParams &
     API.RuleListItem & {
       sorter: any;
@@ -45,8 +45,8 @@ function getRule(req: Request, res: Response, u: string) {
     };
 
   let dataSource = [...tableListDataSource].slice(
-    ((current as number) - 1) * (pageSize as number),
-    (current as number) * (pageSize as number),
+    ((current as number) - 1) * (page_size as number),
+    (current as number) * (page_size as number),
   );
   if (params.sorter) {
     const sorter = JSON.parse(params.sorter);
@@ -98,7 +98,7 @@ function getRule(req: Request, res: Response, u: string) {
     data: dataSource,
     total: tableListDataSource.length,
     success: true,
-    pageSize,
+    page_size,
     current: parseInt(`${params.current}`, 10) || 1,
   };
 

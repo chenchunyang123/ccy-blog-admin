@@ -312,7 +312,7 @@ module.exports = {
     ],
     total: 100,
     success: true,
-    pageSize: 20,
+    page_size: 20,
     current: 1,
   },
   'POST /api/login/outLogin': { data: {}, success: true },

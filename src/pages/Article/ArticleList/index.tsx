@@ -146,8 +146,8 @@ const ArticleList: React.FC = () => {
         request={async (params, sort) => {
           setListLoading(true);
           const res = await getArticleList({
-            pageNum: params.current,
-            pageSize: params.pageSize,
+            page_num: params.current,
+            page_size: params.pageSize,
             title: params.title,
             created_at_from: params.created_at_from,
             created_at_to: params.created_at_to,
@@ -192,7 +192,7 @@ const ArticleList: React.FC = () => {
           },
         }}
         pagination={{
-          pageSize: 5,
+          page_size: 5,
           onChange: (page) => console.log(page),
         }}
         dateFormatter="string"
