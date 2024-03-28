@@ -34,18 +34,19 @@ export default [
     ],
   },
   { path: '/article/update/:id', component: './Article/ArticleUpdate' },
-  { path: '/test', name: '测试', icon: 'smile', component: './Test' },
+  // {
+  //   path: '/admin',
+  //   name: '管理页',
+  //   icon: 'crown',
+  //   access: 'canAdmin',
+  //   routes: [
+  //     { path: '/admin', redirect: '/admin/sub-page' },
+  //     { path: '/admin/sub-page', name: '二级管理页', component: './Admin' },
+  //   ],
+  // },
   {
-    path: '/admin',
-    name: '管理页',
-    icon: 'crown',
-    access: 'canAdmin',
-    routes: [
-      { path: '/admin', redirect: '/admin/sub-page' },
-      { path: '/admin/sub-page', name: '二级管理页', component: './Admin' },
-    ],
+    path: '/',
+    redirect: '/data',
   },
-  { name: '查询表格', icon: 'table', path: '/list', component: './TableList' },
-  { path: '/', redirect: '/data' },
   { path: '*', layout: false, component: './404' },
 ];
