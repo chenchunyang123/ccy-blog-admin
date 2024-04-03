@@ -26,5 +26,19 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        
+    - name: Build Project
     - run: npm install
     - run: npm run build
+    
+    - name: FTP-Deploy-Action
+      uses: SamKirkland/FTP-Deploy-Action@2.0.0 # 使用的sftp插件，将项目传到服务器上，这里使用2.0版本，最新版本4.0不支持sftp
+      env:
+        FTP_SERVER: ${{ secrets.SERVER_IP }} # 你的nginx服务器公网ip
+        FTP_USERNAME: ${{ secrets.USERNAME }} # 你的nginx服务器用户名
+        FTP_PASSWORD: ${{ secrets.PASSWORD }} # 你的nginx服务器密码
+        LOCAL_DIR: ./build/ # 你react项目build好的文件的路径,每次服务器上会自动删除对应的文件夹后重新覆盖
+        REMOTE_DIR: ${{ secrets.SERVER_DESTINATION }} # 你要把你build好的文件夹放到nginx服务器上的什么位置
+        METHOD: sftp # 指定服务为sftp
+        PORT: ${{ SERVER_PORT }} # 你的nginx服务器ssh端口
+
