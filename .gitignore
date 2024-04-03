@@ -17,7 +17,8 @@ yarn-error.log
 /coverage
 .idea
 yarn.lock
-package-lock.json
+# github action需要这个文件
+# package-lock.json  
 *bak
 .vscode
 
