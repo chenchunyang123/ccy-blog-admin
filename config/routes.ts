@@ -33,6 +33,14 @@ export default [
       { path: '/article/tag', name: '标签管理', component: './Article/TagManagement' },
     ],
   },
+  {
+    path: '/website',
+    name: '网站管理',
+    icon: 'crown',
+    routes: [
+      { path: '/website/setting', name: '网站配置', component: './Website/BlogSetting' },
+    ],
+  },
   { path: '/article/update/:id', component: './Article/ArticleUpdate' },
   // {
   //   path: '/admin',
