@@ -129,5 +129,5 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
  */
 export const request = {
   ...errorConfig,
-  baseURL: isDev ? 'http://localhost:8080/api' : 'http://localhost/api',
+  baseURL: isDev ? 'http://localhost:8080/api' : 'http://110.41.81.237/api',
 };
