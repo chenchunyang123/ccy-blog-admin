@@ -206,3 +206,16 @@ export async function updateArticleTag(id: number, data: Record<string, any>) {
     data,
   });
 }
+
+export async function getWebsiteSetting() {
+  return request<Record<string, any>>(`/site/setting`, {
+    method: 'GET',
+  });
+}
+
+export async function updateWebsiteSetting(data: Record<string, any>) {
+  return request<Record<string, any>>(`/site/setting`, {
+    method: 'POST',
+    data,
+  });
+}

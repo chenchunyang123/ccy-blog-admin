@@ -38,7 +38,7 @@ export default [
     name: '网站管理',
     icon: 'crown',
     routes: [
-      { path: '/website/setting', name: '网站配置', component: './Website/BlogSetting' },
+      { path: '/website/setting', name: '博客配置', component: './Website/BlogSetting' },
     ],
   },
   { path: '/article/update/:id', component: './Article/ArticleUpdate' },
