@@ -219,3 +219,13 @@ export async function updateWebsiteSetting(data: Record<string, any>) {
     data,
   });
 }
+
+export async function uploadImg(data: Record<string, any>) {
+  return request<Record<string, any>>(`/auth/upload_img`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data,
+  });
+}
