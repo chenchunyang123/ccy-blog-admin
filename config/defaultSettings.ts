@@ -17,7 +17,7 @@ const Settings: ProLayoutProps & {
   logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   token: {},
   splitMenus: false,
-  siderMenuType: 'sub',
+  siderMenuType: 'group',
   title: '一条放了盐的鱼',
 };
 

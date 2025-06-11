@@ -16,12 +16,12 @@ export default [
     layout: false,
     component: './Login',
   },
-  {
-    path: '/data',
-    name: '数据看板',
-    icon: 'smile',
-    component: './DataBoard',
-  },
+  // {
+  //   path: '/data',
+  //   name: '数据看板',
+  //   icon: 'smile',
+  //   component: './DataBoard',
+  // },
   {
     path: '/article',
     name: '文章管理',
@@ -54,7 +54,7 @@ export default [
   // },
   {
     path: '/',
-    redirect: '/data',
+    redirect: '/article/list',
   },
   { path: '*', layout: false, component: './404' },
 ];

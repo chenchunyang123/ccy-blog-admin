@@ -37,6 +37,7 @@ export const errorConfig: RequestConfig = {
         if (error.response.status === 401) {
           history.push('/login');
         }
+        throw error.response.data;
       } else if (error.request) {
         // 请求已经成功发起，但没有收到响应
         // \`error.request\` 在浏览器中是 XMLHttpRequest 的实例，

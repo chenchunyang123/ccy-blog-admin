@@ -27,7 +27,6 @@ const ArticleList: React.FC = () => {
       title: '标题',
       dataIndex: 'title',
       ellipsis: true,
-      tooltip: '标题过长会自动收缩',
       formItemProps: {
         rules: [
           {
